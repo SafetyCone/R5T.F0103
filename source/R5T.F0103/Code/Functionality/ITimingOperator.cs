@@ -23,6 +23,23 @@ namespace R5T.F0103
             return duration;
         }
 
+        public TOut MeasureDuration<TOut>(
+            Func<TOut> function,
+            out TimeSpan duration)
+        {
+            Stopwatch stopwatch = new Stopwatch();
+
+            stopwatch.Start();
+
+            var output = function();
+
+            stopwatch.Stop();
+
+            duration = stopwatch.Elapsed;
+            
+            return output;
+        }
+
         public TimeSpan InTimingContext(
             Action action,
             Action<TimeSpan> durationConsumer)
