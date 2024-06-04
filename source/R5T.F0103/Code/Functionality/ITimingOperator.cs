@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 using R5T.T0132;
 
@@ -9,6 +10,34 @@ namespace R5T.F0103
     [FunctionalityMarker]
     public partial interface ITimingOperator : IFunctionalityMarker
     {
+        public async Task<TimeSpan> Measure_Duration(Task task)
+        {
+            Stopwatch stopwatch = new Stopwatch();
+
+            stopwatch.Start();
+
+            await task;
+
+            stopwatch.Stop();
+
+            var duration = stopwatch.Elapsed;
+            return duration;
+        }
+
+        public async Task<TimeSpan> Measure_Duration(Func<Task> action)
+        {
+            Stopwatch stopwatch = new Stopwatch();
+
+            stopwatch.Start();
+
+            await action();
+
+            stopwatch.Stop();
+
+            var duration = stopwatch.Elapsed;
+            return duration;
+        }
+
         public TimeSpan MeasureDuration(Action action)
         {
             Stopwatch stopwatch = new Stopwatch();
