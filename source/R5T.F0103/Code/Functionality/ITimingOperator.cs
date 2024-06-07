@@ -10,11 +10,26 @@ namespace R5T.F0103
     [FunctionalityMarker]
     public partial interface ITimingOperator : IFunctionalityMarker
     {
-        public async Task<TimeSpan> Measure_Duration(Task task)
+        public Stopwatch Get_StartedStopwatch()
         {
             Stopwatch stopwatch = new Stopwatch();
 
             stopwatch.Start();
+
+            return stopwatch;
+        }
+
+        public TimeSpan Get_Duration(Stopwatch stopwatch)
+        {
+            stopwatch.Stop();
+
+            var duration = stopwatch.Elapsed;
+            return duration;
+        }
+
+        public async Task<TimeSpan> Measure_Duration(Task task)
+        {
+            var stopwatch = this.Get_StartedStopwatch();
 
             await task;
 
@@ -26,9 +41,7 @@ namespace R5T.F0103
 
         public async Task<TimeSpan> Measure_Duration(Func<Task> action)
         {
-            Stopwatch stopwatch = new Stopwatch();
-
-            stopwatch.Start();
+            var stopwatch = this.Get_StartedStopwatch();
 
             await action();
 
@@ -40,9 +53,7 @@ namespace R5T.F0103
 
         public TimeSpan MeasureDuration(Action action)
         {
-            Stopwatch stopwatch = new Stopwatch();
-
-            stopwatch.Start();
+            var stopwatch = this.Get_StartedStopwatch();
 
             action();
 
@@ -56,9 +67,7 @@ namespace R5T.F0103
             Func<TOut> function,
             out TimeSpan duration)
         {
-            Stopwatch stopwatch = new Stopwatch();
-
-            stopwatch.Start();
+            var stopwatch = this.Get_StartedStopwatch();
 
             var output = function();
 
