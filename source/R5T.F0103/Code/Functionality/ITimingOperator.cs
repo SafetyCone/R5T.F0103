@@ -27,6 +27,18 @@ namespace R5T.F0103
             return duration;
         }
 
+        public TimeSpan Measure_Duration_OfAction(Action action)
+        {
+            var stopwatch = this.Get_StartedStopwatch();
+
+            action();
+
+            stopwatch.Stop();
+
+            var duration = stopwatch.Elapsed;
+            return duration;
+        }
+
         public async Task<TimeSpan> Measure_Duration(Task task)
         {
             var stopwatch = this.Get_StartedStopwatch();
@@ -90,9 +102,9 @@ namespace R5T.F0103
         }
 
         public TimeSpan InTimingContext(Action action)
-        {
-            var duration = this.MeasureDuration(action);
-            return duration;
-        }
+            => this.MeasureDuration(action);
+
+        public Task<TimeSpan> In_TimingContext(Func<Task> action)
+            => this.Measure_Duration(action);
     }
 }
